@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:khabark/core/consants/app_responsive.dart';
+import 'package:khabark/core/constants/app_responsive.dart';
 
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';

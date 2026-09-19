@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:khabark/core/theme/app_colors.dart';
-import 'package:khabark/core/consants/app_responsive.dart';
+import 'package:khabark/core/constants/app_responsive.dart';
 
 import 'app_text_styles.dart';
 
