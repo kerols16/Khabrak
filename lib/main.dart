@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:khabark/core/api_data_source/dio_client.dart';
+import 'package:khabark/core/api_data_source/dio_client.dart' show DioClient;
 import 'package:khabark/core/api_data_source/news_api_service.dart';
+import 'package:khabark/features/news/cubit/news_cubit.dart';
+import 'package:khabark/features/news/data/news_repository.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-final api = NewsApiService(DioClient.create());
-final res = await api.getTopHeadlines(country: 'us', category: 'technology');
-for (final a in res.articles.take(3)) {
-  debugPrint(a.title);
-}
+ 
   runApp(const MyApp());
 }
 

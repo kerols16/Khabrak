@@ -19,7 +19,29 @@ class Article {
     this.publishedAt,
     this.content,
   });
-
+  
+  Article copyWith({
+    Source? source,
+    String? author,
+    String? title,
+    String? description,
+    String? url,
+    String? urlToImage,
+    DateTime? publishedAt,
+    String? content,
+  }) {
+    return Article(
+      source: source ?? this.source,
+      author: author ?? this.author,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      url: url ?? this.url, 
+      urlToImage: urlToImage ?? this.urlToImage,
+      publishedAt: publishedAt ?? this.publishedAt,
+      content: content ?? this.content,
+    );  
+  }
+  
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
       source: Source.fromJson(json['source'] as Map<String, dynamic>? ?? {}),
@@ -71,4 +93,6 @@ class Source {
       'name': name,
     };
   }
+
+
 }
