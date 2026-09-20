@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:khabark/core/theme/app_colors.dart';
-import 'package:khabark/core/constants/app_responsive.dart';
+import 'package:khabark/core/constants/app_spacing.dart';
 
 import 'app_text_styles.dart';
 
@@ -25,7 +25,7 @@ class AppTheme {
         color: AppColors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: AppResponsive.cardBorderRadius,
+          borderRadius: AppSpacing.cardBorderRadius,
           side: const BorderSide(color: AppColors.border, width: 1),
         ),
       ),
@@ -36,7 +36,7 @@ class AppTheme {
           elevation: 0,
           minimumSize: const Size(64, 50),
           shape: RoundedRectangleBorder(
-            borderRadius: AppResponsive.buttonBorderRadius,
+            borderRadius: AppSpacing.buttonBorderRadius,
           ),
           textStyle: AppTextStyles.button,
         ),
@@ -47,7 +47,7 @@ class AppTheme {
           minimumSize: const Size(64, 50),
           side: const BorderSide(color: AppColors.border, width: 1.2),
           shape: RoundedRectangleBorder(
-            borderRadius: AppResponsive.buttonBorderRadius,
+            borderRadius: AppSpacing.buttonBorderRadius,
           ),
           textStyle: AppTextStyles.button.copyWith(color: AppColors.textPrimary),
         ),
@@ -57,23 +57,23 @@ class AppTheme {
         fillColor: AppColors.surface,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
-          borderRadius: AppResponsive.inputBorderRadius,
+          borderRadius: AppSpacing.inputBorderRadius,
           borderSide: const BorderSide(color: AppColors.border, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: AppResponsive.inputBorderRadius,
+          borderRadius: AppSpacing.inputBorderRadius,
           borderSide: const BorderSide(color: AppColors.border, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: AppResponsive.inputBorderRadius,
+          borderRadius: AppSpacing.inputBorderRadius,
           borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: AppResponsive.inputBorderRadius,
+          borderRadius: AppSpacing.inputBorderRadius,
           borderSide: const BorderSide(color: AppColors.error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: AppResponsive.inputBorderRadius,
+          borderRadius: AppSpacing.inputBorderRadius,
           borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
         hintStyle:

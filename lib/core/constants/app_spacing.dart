@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AppResponsive {
-  AppResponsive._();
+class AppSpacing {
+  AppSpacing._();
 
   static const double xs = 4.0;
   static const double s = 8.0;

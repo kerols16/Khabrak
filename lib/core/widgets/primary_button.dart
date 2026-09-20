@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:khabark/core/constants/app_responsive.dart';
+import 'package:khabark/core/constants/app_spacing.dart';
 
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
@@ -31,7 +31,7 @@ class PrimaryButton extends StatelessWidget {
           disabledBackgroundColor:
               AppColors.primary.withValues(alpha: 0.6),
           shape: RoundedRectangleBorder(
-            borderRadius: AppResponsive.buttonBorderRadius,
+            borderRadius: AppSpacing.buttonBorderRadius,
           ),
           elevation: 0,
         ),
@@ -50,7 +50,7 @@ class PrimaryButton extends StatelessWidget {
                 children: [
                   Text(text, style: AppTextStyles.button),
                   if (icon != null) ...[
-                    const SizedBox(width: AppResponsive.s),
+                    const SizedBox(width: AppSpacing.s),
                     Icon(icon, size: 18, color: Colors.white),
                   ],
                 ],
