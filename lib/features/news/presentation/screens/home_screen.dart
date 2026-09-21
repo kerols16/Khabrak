@@ -4,6 +4,7 @@ import 'package:khabark/core/api_data_source/models/article_model.dart';
 import 'package:khabark/core/constants/app_spacing.dart';
 import 'package:khabark/core/theme/app_colors.dart';
 import 'package:khabark/core/theme/app_text_styles.dart';
+import 'package:khabark/core/utils/responsive.dart';
 import 'package:khabark/core/widgets/category_chip.dart';
 import 'package:khabark/core/widgets/empty_view.dart';
 import 'package:khabark/core/widgets/error_view.dart';
@@ -11,10 +12,8 @@ import 'package:khabark/core/widgets/shimmer_box.dart';
 import 'package:khabark/features/news/presentation/widgets/article_card.dart';
 import 'package:khabark/features/news/presentation/widgets/featured_card.dart';
 
-/// Primary news feed screen.
-///
-/// Data & callbacks are supplied by the parent (HomePage). This widget does
-/// not import flutter_bloc and knows nothing about the Cubit.
+/// Primary news feed screen. Cubit-free: data and callbacks are supplied
+/// by the parent HomePage widget.
 class HomeScreen extends StatefulWidget {
   final List<Article> articles;
   final bool isLoading;
@@ -75,16 +74,32 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    // Hydrate initial query. The field owns its text from here on.
     _searchController.text = widget.query;
     _scrollController.addListener(_onScroll);
+    // Kick off a load if the first frame doesn't fill the viewport.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scrollController.hasClients) return;
+      if (_scrollController.position.maxScrollExtent <= 0) {
+        _maybeLoadMore();
+      }
+    });
   }
 
   @override
   void didUpdateWidget(covariant HomeScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.query != widget.query &&
-        _searchController.text != widget.query) {
-      _searchController.text = widget.query;
+    // No controller sync — the search field owns its text.
+    if (oldWidget.articles.length != widget.articles.length ||
+        oldWidget.isLoadingMore != widget.isLoadingMore ||
+        oldWidget.hasReachedMax != widget.hasReachedMax ||
+        oldWidget.errorMessage != widget.errorMessage) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !_scrollController.hasClients) return;
+        if (_scrollController.position.maxScrollExtent <= 0) {
+          _maybeLoadMore();
+        }
+      });
     }
   }
 
@@ -96,20 +111,26 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  /// Guard rails: never page while loading, errored, or exhausted.
   void _onScroll() {
-    if (widget.hasReachedMax) return;
-    if (widget.errorMessage != null) return;
-    if (widget.isLoading || widget.isLoadingMore) return;
+    if (!_scrollController.hasClients) return;
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 300) {
-      widget.onLoadMore();
+      _maybeLoadMore();
     }
+  }
+
+  void _maybeLoadMore() {
+    if (!_scrollController.hasClients) return;
+    if (widget.hasReachedMax) return;
+    if (widget.errorMessage != null) return;
+    if (widget.isLoading) return;
+    if (widget.isLoadingMore) return;
+    if (widget.articles.isEmpty) return;
+    widget.onLoadMore();
   }
 
   @override
   Widget build(BuildContext context) {
-    // No bottomNavigationBar here — MainShell owns the NavigationBar.
     return Scaffold(
       body: SafeArea(
         child: RefreshIndicator(
@@ -117,7 +138,9 @@ class _HomeScreenState extends State<HomeScreen> {
           onRefresh: widget.onRefresh,
           child: CustomScrollView(
             controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
+              // 1. App Header Row
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -170,6 +193,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+
+              // 2. Search Bar — clear button reacts to controller changes.
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -195,20 +220,31 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: AppColors.textSecondary,
                           size: 20,
                         ),
-                        suffixIcon: _searchController.text.isNotEmpty
-                            ? IconButton(
-                                icon: const Icon(Icons.clear_rounded, size: 18),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  widget.onSearchChanged('');
-                                },
-                              )
-                            : null,
+                        suffixIcon: ValueListenableBuilder<TextEditingValue>(
+                          valueListenable: _searchController,
+                          builder: (context, value, _) {
+                            if (value.text.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+                            return IconButton(
+                              icon: const Icon(
+                                Icons.clear_rounded,
+                                size: 18,
+                              ),
+                              onPressed: () {
+                                _searchController.clear();
+                                widget.onSearchChanged('');
+                              },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
+
+              // 3. Category Chips
               SliverToBoxAdapter(
                 child: Container(
                   height: 44,
@@ -235,6 +271,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+
+              // 4. Content Area
               if (widget.isLoading) ...[
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(
@@ -264,7 +302,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-              ] else if (widget.errorMessage != null) ...[
+              ] else if (widget.errorMessage != null &&
+                  widget.articles.isEmpty) ...[
+                // Full-screen error only when there is nothing to show.
                 SliverFillRemaining(
                   hasScrollBody: false,
                   child: ErrorView(
@@ -284,6 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ] else ...[
+                // Featured (always full width)
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.screenHorizontal,
@@ -298,32 +339,32 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SliverToBoxAdapter(
                   child: SizedBox(height: AppSpacing.m),
                 ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.screenHorizontal,
-                  ),
-                  sliver: SliverGrid(
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 380,
-                      mainAxisSpacing: AppSpacing.m,
-                      crossAxisSpacing: AppSpacing.m,
-                      childAspectRatio: 0.82,
+
+                // Responsive cards list / grid
+                ..._buildCardsSlivers(context),
+
+                // Bottom: retry row / spinner / spacer
+                if (widget.errorMessage != null)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: AppSpacing.l),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Couldn't load more.",
+                            style: AppTextStyles.bodySmall,
+                          ),
+                          TextButton(
+                            onPressed: widget.onRetry,
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
                     ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final article = widget.articles[index + 1];
-                        return ArticleCard(
-                          article: article,
-                          onTap: () => widget.onArticleTap(article),
-                          onShare: () => widget.onShare(article),
-                        );
-                      },
-                      childCount: widget.articles.length - 1,
-                    ),
-                  ),
-                ),
-                if (widget.isLoadingMore)
+                  )
+                else if (widget.isLoadingMore)
                   const SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: AppSpacing.l),
@@ -351,5 +392,69 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  
+  List<Widget> _buildCardsSlivers(BuildContext context) {
+    final int columns = Responsive.getGridColumnCount(context);
+    final int itemCount = widget.articles.length - 1;
+    if (itemCount <= 0) return const [];
+
+    if (columns == 1) {
+      return [
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.screenHorizontal,
+          ),
+          sliver: SliverList.separated(
+            itemCount: itemCount,
+            separatorBuilder: (_, __) => const SizedBox(height: 16),
+            itemBuilder: (context, index) {
+              final article = widget.articles[index + 1];
+              return ArticleCard(
+                article: article,
+                onTap: () => widget.onArticleTap(article),
+                onShare: () => widget.onShare(article),
+              );
+            },
+          ),
+        ),
+      ];
+    }
+
+    final double screenWidth = MediaQuery.sizeOf(context).width;
+    const double horizontalPadding = 32; // 16 each side
+    const double gap = 16;
+    final double itemWidth =
+        (screenWidth - horizontalPadding - gap * (columns - 1)) / columns;
+    final double textScale = MediaQuery.textScalerOf(context).scale(1.0);
+    final double mainAxisExtent = itemWidth * 9 / 16 + 250 * textScale;
+
+    return [
+      SliverPadding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.screenHorizontal,
+        ),
+        sliver: SliverGrid(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            mainAxisExtent: mainAxisExtent,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final article = widget.articles[index + 1];
+              return ArticleCard(
+                article: article,
+                onTap: () => widget.onArticleTap(article),
+                onShare: () => widget.onShare(article),
+              );
+            },
+            childCount: itemCount,
+          ),
+        ),
+      ),
+    ];
   }
 }

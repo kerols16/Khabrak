@@ -8,15 +8,7 @@ import 'package:khabark/core/utils/time_ago.dart';
 import 'package:khabark/core/widgets/source_placeholder.dart';
 import 'package:khabark/features/news/presentation/utils/hero_tag.dart';
 
-/// Null-safe editorial card for news feed lists and responsive grids.
-///
-/// Responsive strategy:
-/// - [LayoutBuilder] picks line counts from the card's real width.
-/// - The image sits inside [Expanded] so it absorbs leftover vertical
-///   space in the grid cell instead of forcing a rigid 16:9 that can
-///   push the content past the bottom edge.
-/// - Every text child has an explicit `maxLines` + ellipsis, giving the
-///   content column a bounded height that cannot overflow.
+
 class ArticleCard extends StatelessWidget {
   final Article article;
   final VoidCallback onTap;
@@ -39,8 +31,7 @@ class ArticleCard extends StatelessWidget {
       builder: (context, constraints) {
         final double width = constraints.maxWidth;
 
-        // Narrow cards get fewer lines so the content column's maximum
-        // height still fits inside the grid cell.
+        
         final bool isNarrow = width < 340;
         final int titleLines = isNarrow ? 2 : 3;
         final int descLines = isNarrow ? 1 : 2;
@@ -56,30 +47,29 @@ class ArticleCard extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Image absorbs whatever vertical space remains after the
-                // content is laid out. BoxFit.cover keeps the visual
-                // composition sane regardless of the exact height.
-                Expanded(
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Hero(
-                      tag: heroTagFor(article),
-                      child: hasImage
-                          ? CachedNetworkImage(
-                              imageUrl: article.urlToImage!,
-                              fit: BoxFit.cover,
-                              placeholder: (_, __) =>
-                                  Container(color: AppColors.surfaceDim),
-                              errorWidget: (_, __, ___) => SourcePlaceholder(
-                                sourceName: article.source.name,
-                              ),
-                            )
-                          : SourcePlaceholder(
+                // 16:9 image. AspectRatio gives the card an intrinsic
+                // height, so unbounded vertical constraints (SliverList)
+                // are fine.
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Hero(
+                    tag: heroTagFor(article),
+                    child: hasImage
+                        ? CachedNetworkImage(
+                            imageUrl: article.urlToImage!,
+                            fit: BoxFit.cover,
+                            placeholder: (_, __) =>
+                                Container(color: AppColors.surfaceDim),
+                            errorWidget: (_, __, ___) => SourcePlaceholder(
                               sourceName: article.source.name,
                             ),
-                    ),
+                          )
+                        : SourcePlaceholder(
+                            sourceName: article.source.name,
+                          ),
                   ),
                 ),
                 Padding(
@@ -101,7 +91,6 @@ class ArticleCard extends StatelessWidget {
                         maxLines: titleLines,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      // description is non-null — '' means "missing".
                       if (hasDescription) ...[
                         const SizedBox(height: AppSpacing.s),
                         Text(
@@ -115,8 +104,7 @@ class ArticleCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Flexible so a long "3mo ago" string can never
-                          // push the share icon off the right edge.
+         
                           Flexible(
                             child: Text(
                               article.publishedAt != null

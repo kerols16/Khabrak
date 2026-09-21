@@ -28,7 +28,6 @@ class ArticleDetailsScreen extends StatelessWidget {
     final hasImage =
         article.urlToImage != null && article.urlToImage!.isNotEmpty;
 
-    // Nullable publishedAt — build the metadata line only when available.
     final DateTime? published = article.publishedAt;
     final String? metaLine = published == null
         ? null
@@ -124,7 +123,6 @@ class ArticleDetailsScreen extends StatelessWidget {
                             const SizedBox(height: AppSpacing.m),
                             const Divider(),
                             const SizedBox(height: AppSpacing.m),
-                            // Non-null description; '' means missing.
                             if (article.description.trim().isNotEmpty)
                               Text(
                                 article.description.trim(),
@@ -193,19 +191,25 @@ class ArticleDetailsScreen extends StatelessWidget {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 border: const Border(top: BorderSide(color: AppColors.border)),
                 boxShadow: AppSpacing.cardShadow,
               ),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 700),
-                  child: PrimaryButton(
-                    text: 'Read full article',
-                    icon: Icons.open_in_new_rounded,
-                    onPressed: onReadFull,
+              // Clears system nav bar without re-adding top inset.
+              child: SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 700),
+                      child: PrimaryButton(
+                        text: 'Read full article',
+                        icon: Icons.open_in_new_rounded,
+                        onPressed: onReadFull,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -231,11 +235,11 @@ class _TranslucentCircleButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.85),
+          color: Colors.white.withValues(alpha: 0.85),
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 8,
             ),
           ],

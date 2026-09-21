@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khabark/core/api_data_source/models/article_model.dart';
+import 'package:khabark/features/auth/cubit/auth_cubit.dart';
 import 'package:khabark/features/news/cubit/news_cubit.dart';
+import 'package:khabark/features/news/presentation/pages/article_details_page.dart';
 import 'package:khabark/features/news/presentation/screens/home_screen.dart';
-import 'package:khabark/features/news/presentation/utils/article_details_page.dart';
-
 import 'package:share_plus/share_plus.dart';
 
-
+/// Sole owner of the NewsCubit ↔ HomeScreen wiring.
 class HomePage extends StatelessWidget {
   final VoidCallback onProfileTap;
 
@@ -15,6 +15,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authState = context.watch<AuthCubit>().state;
+    final String? avatarUrl =
+        authState is Authenticated ? authState.photoUrl : null;
+
     return BlocBuilder<NewsCubit, NewsState>(
       builder: (context, state) {
         final cubit = context.read<NewsCubit>();
@@ -28,7 +32,7 @@ class HomePage extends StatelessWidget {
           errorMessage: state is NewsError ? state.message : null,
           selectedCategory: state.category,
           query: state.query,
-          userAvatarUrl: null, // TODO: wire from AuthCubit later.
+          userAvatarUrl: avatarUrl,
           onRefresh: () => cubit.refreshed(),
           onLoadMore: cubit.nextPageRequested,
           onRetry: state.articles.isEmpty
@@ -43,16 +47,11 @@ class HomePage extends StatelessWidget {
               ),
             );
           },
-          onShare: (Article article) => _share(article.url),
+          onShare: (Article article) =>
+              SharePlus.instance.share(ShareParams(text: article.url)),
           onProfileTap: onProfileTap,
         );
       },
     );
-  }
-
-  void _share(String url) {
-    // share_plus >=10 API. If pubspec.lock pins <10, swap to
-    // `Share.share(url)` — I could not verify the pinned version.
-    SharePlus.instance.share(ShareParams(text: url));
   }
 }

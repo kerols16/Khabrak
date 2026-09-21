@@ -1,20 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:khabark/core/constants/app_spacing.dart';
 import 'package:khabark/core/theme/app_colors.dart';
 import 'package:khabark/core/theme/app_text_styles.dart';
 
 
-
-
-/// these fields in.
 class ProfileScreen extends StatelessWidget {
   final String? displayName;
   final String email;
   final String? photoUrl;
   final String signInMethod; 
   final VoidCallback onLogout;
-  final VoidCallback? onBack;
 
   const ProfileScreen({
     super.key,
@@ -23,7 +18,6 @@ class ProfileScreen extends StatelessWidget {
     this.photoUrl,
     required this.signInMethod,
     required this.onLogout,
-    this.onBack,
   });
 
   void _showLogoutDialog(BuildContext context) {
@@ -36,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
         ),
         title: Text('Log out?', style: AppTextStyles.headlineSmall),
         content: Text(
-          'Are you sure you want to log out of Khabark?',
+          'Are you sure you want to log out?',
           style: AppTextStyles.bodyMedium,
         ),
         actions: [
@@ -80,16 +74,7 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: onBack != null
-            ? IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: AppColors.textPrimary,
-                ),
-                onPressed: onBack,
-              )
-            : null,
-        title: Text('Profile & Settings', style: AppTextStyles.titleMedium),
+        title: Text('Profile', style: AppTextStyles.titleMedium),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -103,7 +88,6 @@ class ProfileScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  // User Avatar
                   CircleAvatar(
                     radius: 46,
                     backgroundColor: AppColors.primaryLight,
@@ -120,17 +104,14 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.m),
 
-                  // Display Name
                   if (displayName != null && displayName!.isNotEmpty) ...[
                     Text(displayName!, style: AppTextStyles.headlineSmall),
                     const SizedBox(height: AppSpacing.xs),
                   ],
 
-                  // Email Address
                   Text(email, style: AppTextStyles.bodyMedium),
                   const SizedBox(height: AppSpacing.s),
 
-                  // Sign-in method badge
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
@@ -164,7 +145,6 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.l),
 
-                  // Settings Card
                   Container(
                     decoration: BoxDecoration(
                       color: AppColors.surface,
@@ -172,65 +152,29 @@ class ProfileScreen extends StatelessWidget {
                       border: Border.all(color: AppColors.border),
                       boxShadow: AppSpacing.cardShadow,
                     ),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(
-                            Icons.info_outline_rounded,
-                            color: AppColors.textSecondary,
-                          ),
-                          title: Text(
-                            'About Khabark',
-                            style: AppTextStyles.titleMedium,
-                          ),
-                          subtitle: Text(
-                            'v1.2.0 • Independent journalism',
-                            style: AppTextStyles.bodySmall,
-                          ),
-                          trailing: const Icon(
-                            Icons.chevron_right_rounded,
-                            color: AppColors.textSecondary,
-                          ),
-                          onTap: () {},
-                        ),
-                        const Divider(height: 1),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.privacy_tip_outlined,
-                            color: AppColors.textSecondary,
-                          ),
-                          title: Text(
-                            'Privacy Policy',
-                            style: AppTextStyles.titleMedium,
-                          ),
-                          trailing: const Icon(
-                            Icons.chevron_right_rounded,
-                            color: AppColors.textSecondary,
-                          ),
-                          onTap: () {},
-                        ),
-                        const Divider(height: 1),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.description_outlined,
-                            color: AppColors.textSecondary,
-                          ),
-                          title: Text(
-                            'Terms of Service',
-                            style: AppTextStyles.titleMedium,
-                          ),
-                          trailing: const Icon(
-                            Icons.chevron_right_rounded,
-                            color: AppColors.textSecondary,
-                          ),
-                          onTap: () {},
-                        ),
-                      ],
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.info_outline_rounded,
+                        color: AppColors.textSecondary,
+                      ),
+                      title: Text(
+                        'About Khabark',
+                        style: AppTextStyles.titleMedium,
+                      ),
+                      trailing: const Icon(
+                        Icons.chevron_right_rounded,
+                        color: AppColors.textSecondary,
+                      ),
+                      onTap: () {
+                        showAboutDialog(
+                          context: context,
+                          applicationName: 'Khabark',
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xl),
 
-                  // Outlined Red Log Out Button
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -255,16 +199,6 @@ class ProfileScreen extends StatelessWidget {
                           borderRadius: AppSpacing.buttonBorderRadius,
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.l),
-
-                  // Editorial Footer note
-                  Text(
-                    '“Clarity in a world of noise.”\nKhabark Publishing Group',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.bodySmall.copyWith(
-                      fontStyle: FontStyle.italic,
                     ),
                   ),
                 ],

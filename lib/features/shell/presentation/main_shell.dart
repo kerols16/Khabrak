@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:khabark/features/news/presentation/utils/home_page.dart';
-import 'package:khabark/features/news/presentation/utils/profile_page.dart';
+import 'package:khabark/features/news/presentation/pages/home_page.dart';
+import 'package:khabark/features/profile/presentation/pages/profile_page.dart';
+
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
