@@ -8,16 +8,11 @@ import 'package:khabark/core/utils/time_ago.dart';
 import 'package:khabark/core/widgets/source_placeholder.dart';
 import 'package:khabark/features/news/presentation/utils/hero_tag.dart';
 
-/// Full-width 16:9 editorial hero card with gradient overlay and source badge.
 class FeaturedCard extends StatelessWidget {
   final Article article;
   final VoidCallback onTap;
 
-  const FeaturedCard({
-    super.key,
-    required this.article,
-    required this.onTap,
-  });
+  const FeaturedCard({super.key, required this.article, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +35,9 @@ class FeaturedCard extends StatelessWidget {
                     ? CachedNetworkImage(
                         imageUrl: article.urlToImage!,
                         fit: BoxFit.cover,
-                        placeholder: (_, __) =>
+                        placeholder: (_, _) =>
                             Container(color: AppColors.surfaceDim),
-                        errorWidget: (_, __, ___) =>
+                        errorWidget: (_, _, _) =>
                             SourcePlaceholder(sourceName: article.source.name),
                       )
                     : SourcePlaceholder(sourceName: article.source.name),
@@ -71,15 +66,18 @@ class FeaturedCard extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.primary,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         article.source.name.toUpperCase(),
-                        style: AppTextStyles.labelUppercase
-                            .copyWith(color: Colors.white),
+                        style: AppTextStyles.labelUppercase.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                     const SizedBox(height: AppSpacing.s),
@@ -89,13 +87,13 @@ class FeaturedCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // publishedAt may be null — hide the line entirely.
                     if (article.publishedAt != null) ...[
                       const SizedBox(height: AppSpacing.xs),
                       Text(
                         TimeAgo.format(article.publishedAt!),
-                        style: AppTextStyles.bodySmall
-                            .copyWith(color: Colors.white70),
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: Colors.white70,
+                        ),
                       ),
                     ],
                   ],

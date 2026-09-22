@@ -6,7 +6,6 @@ class Responsive {
   static const double mobileBreakpoint = 600.0;
   static const double tabletBreakpoint = 1024.0;
 
-
   static bool isMobile(BuildContext context) =>
       MediaQuery.sizeOf(context).width < mobileBreakpoint;
 

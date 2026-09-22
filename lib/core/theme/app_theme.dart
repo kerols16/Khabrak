@@ -3,7 +3,6 @@ import 'package:khabark/core/constants/app_spacing.dart';
 import 'package:khabark/core/theme/app_colors.dart';
 import 'package:khabark/core/theme/app_text_styles.dart';
 
-/// Single, cohesive light theme for Khabark.
 class AppTheme {
   AppTheme._();
 
@@ -48,14 +47,18 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: AppSpacing.buttonBorderRadius,
           ),
-          textStyle: AppTextStyles.button.copyWith(color: AppColors.textPrimary),
+          textStyle: AppTextStyles.button.copyWith(
+            color: AppColors.textPrimary,
+          ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surface,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: AppSpacing.inputBorderRadius,
           borderSide: const BorderSide(color: AppColors.border, width: 1),
@@ -76,8 +79,9 @@ class AppTheme {
           borderRadius: AppSpacing.inputBorderRadius,
           borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
-        hintStyle:
-            AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+        hintStyle: AppTextStyles.bodyMedium.copyWith(
+          color: AppColors.textTertiary,
+        ),
       ),
       dividerTheme: const DividerThemeData(
         color: AppColors.divider,
@@ -96,8 +100,9 @@ class AppTheme {
               fontWeight: FontWeight.w600,
             );
           }
-          return AppTextStyles.bodySmall
-              .copyWith(color: AppColors.textSecondary);
+          return AppTextStyles.bodySmall.copyWith(
+            color: AppColors.textSecondary,
+          );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {

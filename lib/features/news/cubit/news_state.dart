@@ -1,11 +1,10 @@
 part of 'news_cubit.dart';
 
-
 sealed class NewsState extends Equatable {
-  final String category; 
+  final String category;
   final String query;
   final List<Article> articles;
-  final int page; 
+  final int page;
   final bool hasReachedMax;
 
   const NewsState({
@@ -60,7 +59,6 @@ class NewsLoadingMore extends NewsState {
   });
 }
 
-
 class NewsError extends NewsState {
   final String message;
 
@@ -74,6 +72,12 @@ class NewsError extends NewsState {
   });
 
   @override
-  List<Object?> get props =>
-      [message, category, query, articles, page, hasReachedMax];
+  List<Object?> get props => [
+    message,
+    category,
+    query,
+    articles,
+    page,
+    hasReachedMax,
+  ];
 }

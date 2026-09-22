@@ -3,12 +3,11 @@ import 'package:khabark/core/constants/app_spacing.dart';
 import 'package:khabark/core/theme/app_colors.dart';
 import 'package:khabark/core/theme/app_text_styles.dart';
 
-
 class ProfileScreen extends StatelessWidget {
   final String? displayName;
   final String email;
   final String? photoUrl;
-  final String signInMethod; 
+  final String signInMethod;
   final VoidCallback onLogout;
 
   const ProfileScreen({
@@ -54,10 +53,7 @@ class ProfileScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text(
-              'Log out',
-              style: TextStyle(color: Colors.white),
-            ),
+            child: const Text('Log out', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -69,6 +65,8 @@ class ProfileScreen extends StatelessWidget {
     final String initial = (displayName != null && displayName!.isNotEmpty)
         ? displayName![0].toUpperCase()
         : (email.isNotEmpty ? email[0].toUpperCase() : 'U');
+
+    final bool hasPhoto = photoUrl != null && photoUrl!.isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(
@@ -91,16 +89,16 @@ class ProfileScreen extends StatelessWidget {
                   CircleAvatar(
                     radius: 46,
                     backgroundColor: AppColors.primaryLight,
-                    backgroundImage:
-                        photoUrl != null ? NetworkImage(photoUrl!) : null,
-                    child: photoUrl == null
-                        ? Text(
+                    backgroundImage: hasPhoto ? NetworkImage(photoUrl!) : null,
+                    onBackgroundImageError: (_, _) {},
+                    child: hasPhoto
+                        ? null
+                        : Text(
                             initial,
                             style: AppTextStyles.headlineLarge.copyWith(
                               color: AppColors.primary,
                             ),
-                          )
-                        : null,
+                          ),
                   ),
                   const SizedBox(height: AppSpacing.m),
 
@@ -143,36 +141,6 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.l),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: AppSpacing.cardBorderRadius,
-                      border: Border.all(color: AppColors.border),
-                      boxShadow: AppSpacing.cardShadow,
-                    ),
-                    child: ListTile(
-                      leading: const Icon(
-                        Icons.info_outline_rounded,
-                        color: AppColors.textSecondary,
-                      ),
-                      title: Text(
-                        'About Khabark',
-                        style: AppTextStyles.titleMedium,
-                      ),
-                      trailing: const Icon(
-                        Icons.chevron_right_rounded,
-                        color: AppColors.textSecondary,
-                      ),
-                      onTap: () {
-                        showAboutDialog(
-                          context: context,
-                          applicationName: 'Khabark',
-                        );
-                      },
-                    ),
-                  ),
                   const SizedBox(height: AppSpacing.xl),
 
                   SizedBox(
@@ -187,8 +155,9 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       label: Text(
                         'Log out',
-                        style: AppTextStyles.button
-                            .copyWith(color: AppColors.error),
+                        style: AppTextStyles.button.copyWith(
+                          color: AppColors.error,
+                        ),
                       ),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(

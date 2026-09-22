@@ -58,18 +58,21 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBoD4A5BsjLpifH50hpluY3gIdGgdht_WI',
-    appId: '1:996462654002:android:373fd3f209688bb945022b',
+    appId: '1:996462654002:android:5122fc5dd9cfd53e45022b',
     messagingSenderId: '996462654002',
     projectId: 'khabrak-99bd5',
     storageBucket: 'khabrak-99bd5.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBioa9--ngOKVewkCDpdAe95wht8CbDH30',
     appId: '1:996462654002:ios:00bc2c20fd62d05945022b',
     messagingSenderId: '996462654002',
     projectId: 'khabrak-99bd5',
     storageBucket: 'khabrak-99bd5.firebasestorage.app',
+    androidClientId:
+        '996462654002-klmv315gupbbqhgvrq4q6u35gtib2ebe.apps.googleusercontent.com',
+    iosClientId:
+        '996462654002-favgiqb179nslka31rcpec7huh9skfci.apps.googleusercontent.com',
     iosBundleId: 'com.example.khabark',
   );
 }

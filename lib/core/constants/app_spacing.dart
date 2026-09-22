@@ -19,14 +19,18 @@ class AppSpacing {
   static const double radiusInput = 12.0;
   static const double radiusChip = 999.0;
 
-  static final BorderRadius cardBorderRadius =
-      BorderRadius.circular(radiusCard);
-  static final BorderRadius buttonBorderRadius =
-      BorderRadius.circular(radiusButton);
-  static final BorderRadius inputBorderRadius =
-      BorderRadius.circular(radiusInput);
-  static final BorderRadius chipBorderRadius =
-      BorderRadius.circular(radiusChip);
+  static final BorderRadius cardBorderRadius = BorderRadius.circular(
+    radiusCard,
+  );
+  static final BorderRadius buttonBorderRadius = BorderRadius.circular(
+    radiusButton,
+  );
+  static final BorderRadius inputBorderRadius = BorderRadius.circular(
+    radiusInput,
+  );
+  static final BorderRadius chipBorderRadius = BorderRadius.circular(
+    radiusChip,
+  );
 
   // Soft ambient card shadow
   static final List<BoxShadow> cardShadow = [

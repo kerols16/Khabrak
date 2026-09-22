@@ -16,7 +16,7 @@ class SourcesResponse {
   }
 
   Map<String, dynamic> toJson() => {
-        'status': status,
-        'sources': sources.map((e) => e.toJson()).toList(),
-      };
+    'status': status,
+    'sources': sources.map((e) => e.toJson()).toList(),
+  };
 }

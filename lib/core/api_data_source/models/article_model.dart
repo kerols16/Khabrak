@@ -1,4 +1,3 @@
-
 class Article {
   final Source source;
   final String? author;
@@ -19,7 +18,7 @@ class Article {
     this.publishedAt,
     this.content,
   });
-  
+
   Article copyWith({
     Source? source,
     String? author,
@@ -35,13 +34,13 @@ class Article {
       author: author ?? this.author,
       title: title ?? this.title,
       description: description ?? this.description,
-      url: url ?? this.url, 
+      url: url ?? this.url,
       urlToImage: urlToImage ?? this.urlToImage,
       publishedAt: publishedAt ?? this.publishedAt,
       content: content ?? this.content,
-    );  
+    );
   }
-  
+
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
       source: Source.fromJson(json['source'] as Map<String, dynamic>? ?? {}),
@@ -56,29 +55,13 @@ class Article {
       content: json['content'] as String?,
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'source': source.toJson(),
-      'author': author,
-      'title': title,
-      'description': description,
-      'url': url,
-      'urlToImage': urlToImage,
-      'publishedAt': publishedAt?.toIso8601String(),
-      'content': content,
-    };
-  }
 }
 
 class Source {
   final String? id;
   final String name;
 
-  const Source({
-    this.id,
-    required this.name,
-  });
+  const Source({this.id, required this.name});
 
   factory Source.fromJson(Map<String, dynamic> json) {
     return Source(
@@ -88,11 +71,6 @@ class Source {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-    };
+    return {'id': id, 'name': name};
   }
-
-
 }

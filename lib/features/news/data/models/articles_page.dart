@@ -6,10 +6,7 @@ class ArticlesPage extends Equatable {
   final List<Article> articles;
   final bool hasReachedMax;
 
-  const ArticlesPage({
-    required this.articles,
-    required this.hasReachedMax,
-  });
+  const ArticlesPage({required this.articles, required this.hasReachedMax});
 
   @override
   List<Object?> get props => [articles, hasReachedMax];

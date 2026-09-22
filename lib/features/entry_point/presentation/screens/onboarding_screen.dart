@@ -5,15 +5,10 @@ import 'package:khabark/core/theme/app_colors.dart';
 import 'package:khabark/core/theme/app_text_styles.dart';
 import 'package:khabark/core/widgets/primary_button.dart';
 
-/// Single-screen onboarding with sequential fade-and-slide entrance
-/// animations. Cubit-free: AppGate owns the "seen" flag and persistence.
 class OnboardingScreen extends StatefulWidget {
   final VoidCallback onGetStarted;
 
-  const OnboardingScreen({
-    super.key,
-    required this.onGetStarted,
-  });
+  const OnboardingScreen({super.key, required this.onGetStarted});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -25,16 +20,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
     super.initState();
-    // Trigger entrance animation on next frame.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) setState(() => _startAnimation = true);
     });
   }
 
-  Widget _buildAnimatedStep({
-    required int index,
-    required Widget child,
-  }) {
+  Widget _buildAnimatedStep({required int index, required Widget child}) {
     return AnimatedSlide(
       offset: _startAnimation ? Offset.zero : const Offset(0, 0.25),
       duration: Duration(milliseconds: 600 + (index * 150)),
@@ -64,7 +55,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 children: [
                   const SizedBox(height: AppSpacing.m),
 
-                  // App wordmark + vermilion dot.
                   _buildAnimatedStep(
                     index: 0,
                     child: Column(
@@ -105,7 +95,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                   const SizedBox(height: AppSpacing.xxl),
 
-                  // Feature rows.
                   _buildAnimatedStep(
                     index: 1,
                     child: const _FeatureRow(
@@ -132,7 +121,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                   const SizedBox(height: AppSpacing.xxl),
 
-                  // CTA.
                   _buildAnimatedStep(
                     index: 4,
                     child: PrimaryButton(

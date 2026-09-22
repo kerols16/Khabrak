@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khabark/core/constants/api_constants.dart';
 import 'package:khabark/core/theme/app_theme.dart';
 import 'package:khabark/features/auth/cubit/auth_cubit.dart';
-import 'package:khabark/features/shell/presentation/app_gate.dart';
+import 'package:khabark/features/entry_point/app_gate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
@@ -17,9 +17,7 @@ Future<void> main() async {
     'Run with --dart-define-from-file=env.json',
   );
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final prefs = await SharedPreferences.getInstance();
   final bool seen = prefs.getBool('onboarding_seen') ?? false;

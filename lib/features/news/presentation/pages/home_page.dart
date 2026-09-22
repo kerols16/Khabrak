@@ -7,7 +7,6 @@ import 'package:khabark/features/news/presentation/pages/article_details_page.da
 import 'package:khabark/features/news/presentation/screens/home_screen.dart';
 import 'package:share_plus/share_plus.dart';
 
-/// Sole owner of the NewsCubit ↔ HomeScreen wiring.
 class HomePage extends StatelessWidget {
   final VoidCallback onProfileTap;
 
@@ -16,8 +15,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authState = context.watch<AuthCubit>().state;
-    final String? avatarUrl =
-        authState is Authenticated ? authState.photoUrl : null;
+    final String? avatarUrl = authState is Authenticated
+        ? authState.photoUrl
+        : null;
 
     return BlocBuilder<NewsCubit, NewsState>(
       builder: (context, state) {
@@ -25,7 +25,8 @@ class HomePage extends StatelessWidget {
 
         return HomeScreen(
           articles: state.articles,
-          isLoading: state is NewsInitial ||
+          isLoading:
+              state is NewsInitial ||
               (state is NewsLoading && state.articles.isEmpty),
           isLoadingMore: state is NewsLoadingMore,
           hasReachedMax: state.hasReachedMax,

@@ -4,7 +4,6 @@ import '../constants/app_spacing.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
-
 class AppTextField extends StatelessWidget {
   final String label;
   final String hintText;
@@ -54,8 +53,11 @@ class AppTextField extends StatelessWidget {
           style: AppTextStyles.bodyLarge,
           decoration: InputDecoration(
             hintText: hintText,
-            prefixIcon:
-                Icon(prefixIcon, color: AppColors.textSecondary, size: 20),
+            prefixIcon: Icon(
+              prefixIcon,
+              color: AppColors.textSecondary,
+              size: 20,
+            ),
             suffixIcon: isPassword
                 ? IconButton(
                     icon: Icon(

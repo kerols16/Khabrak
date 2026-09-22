@@ -8,7 +8,6 @@ import 'package:khabark/core/utils/time_ago.dart';
 import 'package:khabark/core/widgets/source_placeholder.dart';
 import 'package:khabark/features/news/presentation/utils/hero_tag.dart';
 
-
 class ArticleCard extends StatelessWidget {
   final Article article;
   final VoidCallback onTap;
@@ -31,7 +30,6 @@ class ArticleCard extends StatelessWidget {
       builder: (context, constraints) {
         final double width = constraints.maxWidth;
 
-        
         final bool isNarrow = width < 340;
         final int titleLines = isNarrow ? 2 : 3;
         final int descLines = isNarrow ? 1 : 2;
@@ -50,9 +48,6 @@ class ArticleCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 16:9 image. AspectRatio gives the card an intrinsic
-                // height, so unbounded vertical constraints (SliverList)
-                // are fine.
                 AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Hero(
@@ -61,15 +56,13 @@ class ArticleCard extends StatelessWidget {
                         ? CachedNetworkImage(
                             imageUrl: article.urlToImage!,
                             fit: BoxFit.cover,
-                            placeholder: (_, __) =>
+                            placeholder: (_, _) =>
                                 Container(color: AppColors.surfaceDim),
-                            errorWidget: (_, __, ___) => SourcePlaceholder(
+                            errorWidget: (_, _, _) => SourcePlaceholder(
                               sourceName: article.source.name,
                             ),
                           )
-                        : SourcePlaceholder(
-                            sourceName: article.source.name,
-                          ),
+                        : SourcePlaceholder(sourceName: article.source.name),
                   ),
                 ),
                 Padding(
@@ -104,7 +97,6 @@ class ArticleCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-         
                           Flexible(
                             child: Text(
                               article.publishedAt != null

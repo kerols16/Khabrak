@@ -12,8 +12,6 @@ import 'package:khabark/core/widgets/shimmer_box.dart';
 import 'package:khabark/features/news/presentation/widgets/article_card.dart';
 import 'package:khabark/features/news/presentation/widgets/featured_card.dart';
 
-/// Primary news feed screen. Cubit-free: data and callbacks are supplied
-/// by the parent HomePage widget.
 class HomeScreen extends StatefulWidget {
   final List<Article> articles;
   final bool isLoading;
@@ -74,10 +72,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Hydrate initial query. The field owns its text from here on.
     _searchController.text = widget.query;
     _scrollController.addListener(_onScroll);
-    // Kick off a load if the first frame doesn't fill the viewport.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || !_scrollController.hasClients) return;
       if (_scrollController.position.maxScrollExtent <= 0) {
@@ -89,7 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didUpdateWidget(covariant HomeScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // No controller sync — the search field owns its text.
     if (oldWidget.articles.length != widget.articles.length ||
         oldWidget.isLoadingMore != widget.isLoadingMore ||
         oldWidget.hasReachedMax != widget.hasReachedMax ||
@@ -140,7 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
-              // 1. App Header Row
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -194,7 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              // 2. Search Bar — clear button reacts to controller changes.
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -227,10 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               return const SizedBox.shrink();
                             }
                             return IconButton(
-                              icon: const Icon(
-                                Icons.clear_rounded,
-                                size: 18,
-                              ),
+                              icon: const Icon(Icons.clear_rounded, size: 18),
                               onPressed: () {
                                 _searchController.clear();
                                 widget.onSearchChanged('');
@@ -244,7 +234,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              // 3. Category Chips
               SliverToBoxAdapter(
                 child: Container(
                   height: 44,
@@ -255,15 +244,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       horizontal: AppSpacing.screenHorizontal,
                     ),
                     itemCount: _categories.length,
-                    separatorBuilder: (_, __) =>
+                    separatorBuilder: (_, _) =>
                         const SizedBox(width: AppSpacing.s),
                     itemBuilder: (context, index) {
                       final category = _categories[index];
-                      final isSelected = category.toLowerCase() ==
+                      final isSelected =
+                          category.toLowerCase() ==
                           widget.selectedCategory.toLowerCase();
                       return CategoryChip(
-                        label: category[0].toUpperCase() +
-                            category.substring(1),
+                        label:
+                            category[0].toUpperCase() + category.substring(1),
                         isSelected: isSelected,
                         onSelected: () => widget.onCategorySelected(category),
                       );
@@ -272,7 +262,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              // 4. Content Area
               if (widget.isLoading) ...[
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(
@@ -304,7 +293,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ] else if (widget.errorMessage != null &&
                   widget.articles.isEmpty) ...[
-                // Full-screen error only when there is nothing to show.
                 SliverFillRemaining(
                   hasScrollBody: false,
                   child: ErrorView(
@@ -324,7 +312,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ] else ...[
-                // Featured (always full width)
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.screenHorizontal,
@@ -336,19 +323,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: AppSpacing.m),
-                ),
+                const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.m)),
 
-                // Responsive cards list / grid
                 ..._buildCardsSlivers(context),
 
-                // Bottom: retry row / spinner / spacer
                 if (widget.errorMessage != null)
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: AppSpacing.l),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.l,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -394,7 +378,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  
   List<Widget> _buildCardsSlivers(BuildContext context) {
     final int columns = Responsive.getGridColumnCount(context);
     final int itemCount = widget.articles.length - 1;
@@ -408,7 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           sliver: SliverList.separated(
             itemCount: itemCount,
-            separatorBuilder: (_, __) => const SizedBox(height: 16),
+            separatorBuilder: (_, _) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
               final article = widget.articles[index + 1];
               return ArticleCard(
@@ -423,7 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     final double screenWidth = MediaQuery.sizeOf(context).width;
-    const double horizontalPadding = 32; // 16 each side
+    const double horizontalPadding = 32;
     const double gap = 16;
     final double itemWidth =
         (screenWidth - horizontalPadding - gap * (columns - 1)) / columns;
@@ -442,17 +425,14 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisSpacing: 16,
             mainAxisExtent: mainAxisExtent,
           ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final article = widget.articles[index + 1];
-              return ArticleCard(
-                article: article,
-                onTap: () => widget.onArticleTap(article),
-                onShare: () => widget.onShare(article),
-              );
-            },
-            childCount: itemCount,
-          ),
+          delegate: SliverChildBuilderDelegate((context, index) {
+            final article = widget.articles[index + 1];
+            return ArticleCard(
+              article: article,
+              onTap: () => widget.onArticleTap(article),
+              onShare: () => widget.onShare(article),
+            );
+          }, childCount: itemCount),
         ),
       ),
     ];

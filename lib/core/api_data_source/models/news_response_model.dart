@@ -1,4 +1,3 @@
-
 import 'package:khabark/core/api_data_source/models/article_model.dart';
 
 class NewsResponse {
@@ -20,13 +19,5 @@ class NewsResponse {
           .map((item) => Article.fromJson(item as Map<String, dynamic>))
           .toList(),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'status': status,
-      'totalResults': totalResults,
-      'articles': articles.map((item) => item.toJson()).toList(),
-    };
   }
 }

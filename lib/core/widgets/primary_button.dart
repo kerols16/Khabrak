@@ -4,7 +4,6 @@ import 'package:khabark/core/constants/app_spacing.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
-
 class PrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -28,8 +27,7 @@ class PrimaryButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
-          disabledBackgroundColor:
-              AppColors.primary.withValues(alpha: 0.6),
+          disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.6),
           shape: RoundedRectangleBorder(
             borderRadius: AppSpacing.buttonBorderRadius,
           ),

@@ -15,8 +15,6 @@ class AuthScreen extends StatefulWidget {
   final void Function(String email, String password) onSignUp;
   final VoidCallback onGoogleSignIn;
 
-  /// Page awaits the cubit and shows the SnackBar; the screen just hands
-  /// over the current email text.
   final Future<void> Function(String email) onForgotPassword;
   final VoidCallback? onModeChanged;
 
@@ -55,7 +53,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Email is trimmed; the password must be passed through as-is.
       final email = _emailController.text.trim();
       final password = _passwordController.text;
       if (_isSignUp) {
@@ -85,7 +82,6 @@ class _AuthScreenState extends State<AuthScreen> {
                 horizontal: AppSpacing.screenHorizontal,
                 vertical: AppSpacing.l,
               ),
-              // Mobile: bare form. Wider: wrap in the existing Card.
               child: Responsive.isMobile(context)
                   ? _buildForm()
                   : Card(
@@ -176,8 +172,9 @@ class _AuthScreenState extends State<AuthScreen> {
                   Expanded(
                     child: Text(
                       widget.errorMessage!,
-                      style: AppTextStyles.bodySmall
-                          .copyWith(color: AppColors.error),
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.error,
+                      ),
                     ),
                   ),
                 ],
@@ -214,11 +211,9 @@ class _AuthScreenState extends State<AuthScreen> {
             isPassword: true,
             obscureText: _obscurePassword,
             enabled: !widget.isLoading,
-            onToggleVisibility: () => setState(
-              () => _obscurePassword = !_obscurePassword,
-            ),
+            onToggleVisibility: () =>
+                setState(() => _obscurePassword = !_obscurePassword),
             validator: (value) {
-              // Passwords are never trimmed.
               if (value == null || value.isEmpty) {
                 return 'Password is required';
               }
@@ -255,13 +250,10 @@ class _AuthScreenState extends State<AuthScreen> {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                // TextButton.onPressed is VoidCallback?, so wrap the
-                // String-arg callback and supply the current email.
                 onPressed: widget.isLoading
                     ? null
-                    : () => widget.onForgotPassword(
-                          _emailController.text.trim(),
-                        ),
+                    : () =>
+                          widget.onForgotPassword(_emailController.text.trim()),
                 child: Text(
                   'Forgot password?',
                   style: AppTextStyles.bodySmall.copyWith(
@@ -286,13 +278,8 @@ class _AuthScreenState extends State<AuthScreen> {
             children: [
               const Expanded(child: Divider()),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.m,
-                ),
-                child: Text(
-                  'or',
-                  style: AppTextStyles.bodySmall,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.m),
+                child: Text('or', style: AppTextStyles.bodySmall),
               ),
               const Expanded(child: Divider()),
             ],
@@ -308,7 +295,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   'assets/Google__G__logo.svg',
                   width: 20,
                   height: 20,
-                  errorBuilder: (_, __, ___) => const Icon(
+                  errorBuilder: (_, _, _) => const Icon(
                     Icons.g_mobiledata_rounded,
                     size: 24,
                     color: AppColors.textPrimary,

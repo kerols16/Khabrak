@@ -1,4 +1,3 @@
-
 class Sources {
   final String id;
   final String name;
@@ -31,12 +30,12 @@ class Sources {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'description': description,
-        'url': url,
-        'category': category,
-        'language': language,
-        'country': country,
-      };
+    'id': id,
+    'name': name,
+    'description': description,
+    'url': url,
+    'category': category,
+    'language': language,
+    'country': country,
+  };
 }

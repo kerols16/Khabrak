@@ -12,7 +12,12 @@
           "package_name": "com.example.khabark"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "996462654002-ldpv3e6aqddq6tc5tqndde18qrlufc0f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBoD4A5BsjLpifH50hpluY3gIdGgdht_WI"
@@ -20,7 +25,63 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996462654002-ldpv3e6aqddq6tc5tqndde18qrlufc0f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "996462654002-favgiqb179nslka31rcpec7huh9skfci.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.khabark"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996462654002:android:5122fc5dd9cfd53e45022b",
+        "android_client_info": {
+          "package_name": "com.kerols.khabark"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "996462654002-klmv315gupbbqhgvrq4q6u35gtib2ebe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kerols.khabark",
+            "certificate_hash": "4b7b6fb80c51d08cf671a845f307abd27abf94d6"
+          }
+        },
+        {
+          "client_id": "996462654002-ldpv3e6aqddq6tc5tqndde18qrlufc0f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoD4A5BsjLpifH50hpluY3gIdGgdht_WI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996462654002-ldpv3e6aqddq6tc5tqndde18qrlufc0f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "996462654002-favgiqb179nslka31rcpec7huh9skfci.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.khabark"
+              }
+            }
+          ]
         }
       }
     }

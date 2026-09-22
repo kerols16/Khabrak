@@ -10,7 +10,6 @@ import 'package:khabark/core/widgets/primary_button.dart';
 import 'package:khabark/core/widgets/source_placeholder.dart';
 import 'package:khabark/features/news/presentation/utils/hero_tag.dart';
 
-/// Editorial article detail screen with hero image and pinned external-link CTA.
 class ArticleDetailsScreen extends StatelessWidget {
   final Article article;
   final VoidCallback onReadFull;
@@ -55,9 +54,9 @@ class ArticleDetailsScreen extends StatelessWidget {
                           child: CachedNetworkImage(
                             imageUrl: article.urlToImage!,
                             fit: BoxFit.cover,
-                            placeholder: (_, __) =>
+                            placeholder: (_, _) =>
                                 Container(color: AppColors.surfaceDim),
-                            errorWidget: (_, __, ___) => SourcePlaceholder(
+                            errorWidget: (_, _, _) => SourcePlaceholder(
                               sourceName: article.source.name,
                             ),
                           ),
@@ -114,9 +113,13 @@ class ArticleDetailsScreen extends StatelessWidget {
                                   ),
                                 ],
                                 if (metaLine != null)
-                                  Text(
-                                    metaLine,
-                                    style: AppTextStyles.bodySmall,
+                                  Flexible(
+                                    child: Text(
+                                      metaLine,
+                                      style: AppTextStyles.bodySmall,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                               ],
                             ),
@@ -196,7 +199,6 @@ class ArticleDetailsScreen extends StatelessWidget {
                 border: const Border(top: BorderSide(color: AppColors.border)),
                 boxShadow: AppSpacing.cardShadow,
               ),
-              // Clears system nav bar without re-adding top inset.
               child: SafeArea(
                 top: false,
                 child: Padding(

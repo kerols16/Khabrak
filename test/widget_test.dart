@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:khabark/features/shell/presentation/app_gate.dart';
+import 'package:khabark/features/entry_point/app_gate.dart';
 
 
 void main() {

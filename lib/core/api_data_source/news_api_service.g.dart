@@ -22,58 +22,6 @@ class _NewsApiService implements NewsApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<NewsResponse> getEverything({
-    String? q,
-    String? searchIn,
-    String? sources,
-    String? domains,
-    String? excludeDomains,
-    String? from,
-    String? to,
-    String? language,
-    String? sortBy,
-    int? pageSize,
-    int? page,
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'q': q,
-      r'searchIn': searchIn,
-      r'sources': sources,
-      r'domains': domains,
-      r'excludeDomains': excludeDomains,
-      r'from': from,
-      r'to': to,
-      r'language': language,
-      r'sortBy': sortBy,
-      r'pageSize': pageSize,
-      r'page': page,
-    };
-    queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<NewsResponse>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            'everything',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late NewsResponse _value;
-    try {
-      _value = NewsResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, response: _result);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
   Future<NewsResponse> getTopHeadlines({
     String? country,
     String? category,
@@ -108,42 +56,6 @@ class _NewsApiService implements NewsApiService {
     late NewsResponse _value;
     try {
       _value = NewsResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, response: _result);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<SourcesResponse> getSources({
-    String? category,
-    String? language,
-    String? country,
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'category': category,
-      r'language': language,
-      r'country': country,
-    };
-    queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<SourcesResponse>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            'top-headlines/sources',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late SourcesResponse _value;
-    try {
-      _value = SourcesResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

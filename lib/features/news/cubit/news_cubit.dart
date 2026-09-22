@@ -26,16 +26,17 @@ class NewsCubit extends Cubit<NewsState> {
     return super.close();
   }
 
-
   Future<void> started() async {
     final gen = ++_generation;
-    emit(NewsLoading(
-      category: state.category,
-      query: state.query,
-      articles: const <Article>[],
-      page: 0,
-      hasReachedMax: false,
-    ));
+    emit(
+      NewsLoading(
+        category: state.category,
+        query: state.query,
+        articles: const <Article>[],
+        page: 0,
+        hasReachedMax: false,
+      ),
+    );
     await _load(
       category: state.category,
       query: state.query,
@@ -49,13 +50,15 @@ class NewsCubit extends Cubit<NewsState> {
     if (category == state.category) return;
 
     final gen = ++_generation;
-    emit(NewsLoading(
-      category: category,
-      query: state.query,
-      articles: const <Article>[],
-      page: 0,
-      hasReachedMax: false,
-    ));
+    emit(
+      NewsLoading(
+        category: category,
+        query: state.query,
+        articles: const <Article>[],
+        page: 0,
+        hasReachedMax: false,
+      ),
+    );
     await _load(
       category: category,
       query: state.query,
@@ -75,13 +78,15 @@ class NewsCubit extends Cubit<NewsState> {
 
   Future<void> refreshed() async {
     final gen = ++_generation;
-    emit(NewsLoading(
-      category: state.category,
-      query: state.query,
-      articles: state.articles,
-      page: state.page,
-      hasReachedMax: state.hasReachedMax,
-    ));
+    emit(
+      NewsLoading(
+        category: state.category,
+        query: state.query,
+        articles: state.articles,
+        page: state.page,
+        hasReachedMax: state.hasReachedMax,
+      ),
+    );
     await _load(
       category: state.category,
       query: state.query,
@@ -96,13 +101,15 @@ class NewsCubit extends Cubit<NewsState> {
     if (state is NewsLoading || state is NewsLoadingMore) return;
     if (state.articles.isEmpty) return;
 
-    emit(NewsLoadingMore(
-      category: state.category,
-      query: state.query,
-      articles: state.articles,
-      page: state.page,
-      hasReachedMax: state.hasReachedMax,
-    ));
+    emit(
+      NewsLoadingMore(
+        category: state.category,
+        query: state.query,
+        articles: state.articles,
+        page: state.page,
+        hasReachedMax: state.hasReachedMax,
+      ),
+    );
     await _load(
       category: state.category,
       query: state.query,
@@ -112,18 +119,19 @@ class NewsCubit extends Cubit<NewsState> {
     );
   }
 
-
   Future<void> _runSearch(String trimmed) async {
     if (isClosed) return;
 
     final gen = ++_generation;
-    emit(NewsLoading(
-      category: state.category,
-      query: trimmed,
-      articles: const <Article>[],
-      page: 0,
-      hasReachedMax: false,
-    ));
+    emit(
+      NewsLoading(
+        category: state.category,
+        query: trimmed,
+        articles: const <Article>[],
+        page: 0,
+        hasReachedMax: false,
+      ),
+    );
     await _load(
       category: state.category,
       query: trimmed,
@@ -153,13 +161,15 @@ class NewsCubit extends Cubit<NewsState> {
           ? _mergeDeduped(state.articles, result.articles)
           : result.articles;
 
-      emit(NewsLoaded(
-        category: category,
-        query: query,
-        articles: merged,
-        page: page,
-        hasReachedMax: result.hasReachedMax,
-      ));
+      emit(
+        NewsLoaded(
+          category: category,
+          query: query,
+          articles: merged,
+          page: page,
+          hasReachedMax: result.hasReachedMax,
+        ),
+      );
     } on NewsFailure catch (e) {
       if (!_isCurrent(generation, category, query, append)) return;
       _emitError(e.message);
@@ -169,12 +179,7 @@ class NewsCubit extends Cubit<NewsState> {
     }
   }
 
-  bool _isCurrent(
-    int generation,
-    String category,
-    String query,
-    bool append,
-  ) {
+  bool _isCurrent(int generation, String category, String query, bool append) {
     if (isClosed) return false;
     if (_generation != generation) return false;
     if (state.category != category || state.query != query) return false;
@@ -183,14 +188,16 @@ class NewsCubit extends Cubit<NewsState> {
   }
 
   void _emitError(String message) {
-    emit(NewsError(
-      message: message,
-      category: state.category,
-      query: state.query,
-      articles: state.articles,
-      page: state.page,
-      hasReachedMax: state.hasReachedMax,
-    ));
+    emit(
+      NewsError(
+        message: message,
+        category: state.category,
+        query: state.query,
+        articles: state.articles,
+        page: state.page,
+        hasReachedMax: state.hasReachedMax,
+      ),
+    );
   }
 
   List<Article> _mergeDeduped(List<Article> current, List<Article> incoming) {

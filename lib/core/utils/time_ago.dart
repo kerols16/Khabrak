@@ -1,5 +1,3 @@
-/// Converts a DateTime instance into a compact relative duration string
-/// (e.g. "3h ago").
 class TimeAgo {
   TimeAgo._();
 

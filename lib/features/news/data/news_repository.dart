@@ -6,25 +6,23 @@ import '../../../core/api_data_source/news_api_service.dart';
 import 'models/articles_page.dart';
 import 'news_failure.dart';
 
-
-
 class NewsRepository {
   final NewsApiService _service;
-static const int pageSize = 20;
-static const String _country = 'us';
-static const int _maxResultsFreePlan = 100; 
-static const List<String> _consentFragments = [
-  'consent.yahoo.com',
-  'collectConsent',
-  'zustimmung',
-  '/consent',
-];
+  static const int pageSize = 20;
+  static const String _country = 'us';
+  static const int _maxResultsFreePlan = 100;
+  static const List<String> _consentFragments = [
+    'consent.yahoo.com',
+    'collectConsent',
+    'zustimmung',
+    '/consent',
+  ];
   NewsRepository(this._service);
 
   Future<ArticlesPage> getTopHeadlines({
     required String category,
     String query = '',
-    required int page, 
+    required int page,
   }) async {
     final trimmedQuery = query.trim();
 
@@ -48,9 +46,7 @@ static const List<String> _consentFragments = [
     }
 
     if (response.status != 'ok') {
-      throw NewsFailure(
-        'NewsAPI returned status "${response.status}".',
-      );
+      throw NewsFailure('NewsAPI returned status "${response.status}".');
     }
 
     final cleaned = _cleanArticles(response.articles);
@@ -58,13 +54,11 @@ static const List<String> _consentFragments = [
     final cap = response.totalResults < _maxResultsFreePlan
         ? response.totalResults
         : _maxResultsFreePlan;
-    final hasReachedMax =
-        response.articles.isEmpty || page * pageSize >= cap;
+    final hasReachedMax = response.articles.isEmpty || page * pageSize >= cap;
 
     return ArticlesPage(articles: cleaned, hasReachedMax: hasReachedMax);
   }
 
- 
   List<Article> _cleanArticles(List<Article> input) {
     final seenUrls = <String>{};
     final out = <Article>[];
@@ -83,7 +77,7 @@ static const List<String> _consentFragments = [
       final image = article.urlToImage?.trim() ?? '';
       if (description.isEmpty && image.isEmpty) continue;
 
-      if (!seenUrls.add(url)) continue; 
+      if (!seenUrls.add(url)) continue;
 
       out.add(_stripPublisherSuffix(article));
     }
@@ -103,12 +97,11 @@ static const List<String> _consentFragments = [
     if (tail.toLowerCase() != suffix.toLowerCase()) return article;
 
     final stripped = title.substring(0, title.length - suffix.length).trim();
-    if (stripped.isEmpty) return article; 
+    if (stripped.isEmpty) return article;
 
     return article.copyWith(title: stripped);
   }
 
- 
   String _messageForDio(DioException e) {
     switch (e.type) {
       case DioExceptionType.connectionError:

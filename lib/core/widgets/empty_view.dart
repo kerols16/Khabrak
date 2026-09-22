@@ -8,14 +8,18 @@ class EmptyView extends StatelessWidget {
   final String query;
   final VoidCallback? onClear;
 
-  const EmptyView({
-    super.key,
-    required this.query,
-    this.onClear,
-  });
+  const EmptyView({super.key, required this.query, this.onClear});
 
   @override
   Widget build(BuildContext context) {
+    final bool hasQuery = query.trim().isNotEmpty;
+    final String title = hasQuery
+        ? 'No results for "$query"'
+        : 'No articles found';
+    final String hint = hasQuery
+        ? 'Try checking for typos or searching for a different keyword.'
+        : 'Try another category.';
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.l),
@@ -37,17 +41,17 @@ class EmptyView extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.m),
             Text(
-              'No results for "$query"',
+              title,
               style: AppTextStyles.headlineSmall,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSpacing.s),
             Text(
-              'Try checking for typos or searching for a different keyword.',
+              hint,
               style: AppTextStyles.bodyMedium,
               textAlign: TextAlign.center,
             ),
-            if (onClear != null) ...[
+            if (hasQuery && onClear != null) ...[
               const SizedBox(height: AppSpacing.l),
               OutlinedButton(
                 onPressed: onClear,

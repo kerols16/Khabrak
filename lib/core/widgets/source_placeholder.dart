@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../theme/app_colors.dart';
 
-
 class SourcePlaceholder extends StatelessWidget {
   final String sourceName;
   final double? height;
@@ -25,9 +24,7 @@ class SourcePlaceholder extends StatelessWidget {
     return Container(
       height: height ?? double.infinity,
       width: width ?? double.infinity,
-      decoration: const BoxDecoration(
-        color: AppColors.surfaceDim,
-      ),
+      decoration: const BoxDecoration(color: AppColors.surfaceDim),
       child: Center(
         child: Container(
           width: 52,
