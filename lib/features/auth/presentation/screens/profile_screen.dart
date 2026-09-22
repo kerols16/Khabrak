@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:khabark/core/constants/app_spacing.dart';
 import 'package:khabark/core/theme/app_colors.dart';
 import 'package:khabark/core/theme/app_text_styles.dart';
@@ -66,8 +67,6 @@ class ProfileScreen extends StatelessWidget {
         ? displayName![0].toUpperCase()
         : (email.isNotEmpty ? email[0].toUpperCase() : 'U');
 
-    final bool hasPhoto = photoUrl != null && photoUrl!.isNotEmpty;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.background,
@@ -89,16 +88,21 @@ class ProfileScreen extends StatelessWidget {
                   CircleAvatar(
                     radius: 46,
                     backgroundColor: AppColors.primaryLight,
-                    backgroundImage: hasPhoto ? NetworkImage(photoUrl!) : null,
-                    onBackgroundImageError: (_, _) {},
-                    child: hasPhoto
-                        ? null
-                        : Text(
+                    backgroundImage: (photoUrl != null && photoUrl!.isNotEmpty)
+                        ? NetworkImage(photoUrl!)
+                        : null,
+                    onBackgroundImageError:
+                        (photoUrl != null && photoUrl!.isNotEmpty)
+                        ? (_, _) {}
+                        : null,
+                    child: (photoUrl == null || photoUrl!.isEmpty)
+                        ? Text(
                             initial,
                             style: AppTextStyles.headlineLarge.copyWith(
                               color: AppColors.primary,
                             ),
-                          ),
+                          )
+                        : null,
                   ),
                   const SizedBox(height: AppSpacing.m),
 
@@ -123,13 +127,17 @@ class ProfileScreen extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          signInMethod.toLowerCase() == 'google'
-                              ? Icons.g_mobiledata_rounded
-                              : Icons.mail_outline_rounded,
-                          size: 18,
-                          color: AppColors.primary,
-                        ),
+                        signInMethod.toLowerCase() == 'google'
+                            ? SvgPicture.asset(
+                                'assets/Google__G__logo.svg',
+                                width: 18,
+                                height: 18,
+                              )
+                            : Icon(
+                                Icons.mail_outline_rounded,
+                                size: 18,
+                                color: AppColors.primary,
+                              ),
                         const SizedBox(width: 4),
                         Text(
                           'Signed in with $signInMethod',
