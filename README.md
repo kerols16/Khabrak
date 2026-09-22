@@ -8,7 +8,7 @@ uses Firebase Authentication (Email/Password and Google Sign-In).
 
 ## Demo
 
-- Demo video: `<ADD VIDEO LINK>`
+- Demo video: [`Video explanation and experiment`](https://drive.google.com/file/d/1nw-Le6SMfaruLkN1U_v1CoZ3K6soB2pQ/view?usp=sharing)
 
 |                                                         Onboarding                                                         |                                                         Sign in                                                         |                                                         Home                                                         |                                                         Article                                                         |
 | :------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: |
@@ -52,7 +52,7 @@ Exact versions are in `pubspec.yaml`.
 ### 2. Get the code
 
 ```bash
-git clone <ADD REPO URL>
+git clone https://github.com/kerols16/Khabrak.git
 cd khabark
 flutter pub get
 ```
